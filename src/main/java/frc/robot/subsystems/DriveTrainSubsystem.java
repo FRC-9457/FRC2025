@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrainSubsystem extends SubsystemBase {
-  private final PWMSparkMax m_frontLeft = new PWMSparkMax(7);
+  private final PWMSparkMax m_frontLeft = new PWMSparkMax(DriveConstants.kFrontLeftChannel);
   private final PWMSparkMax m_rearLeft = new PWMSparkMax(DriveConstants.kRearLeftChannel);
   private final PWMSparkMax m_frontRight = new PWMSparkMax(DriveConstants.kFrontRightChannel);
   private final PWMSparkMax m_rearRight = new PWMSparkMax(DriveConstants.kRearRightChannel);
@@ -54,14 +54,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
           DriveConstants.kRearRightEncoderReversed);
 
   // The gyro sensor
-  private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
+  // private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
   // Odometry class for tracking robot pose
-  MecanumDriveOdometry m_odometry =
-      new MecanumDriveOdometry(
-          DriveConstants.kDriveKinematics,
-          m_gyro.getRotation2d(),
-          new MecanumDriveWheelPositions());
+  // MecanumDriveOdometry m_odometry =
+  //     new MecanumDriveOdometry(
+  //         DriveConstants.kDriveKinematics,
+  //         m_gyro.getRotation2d(),
+  //         new MecanumDriveWheelPositions());
 
   /** Creates a new DriveSubsystem. */
   public DriveTrainSubsystem() {
@@ -85,7 +85,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(m_gyro.getRotation2d(), getCurrentWheelDistances());
+    // m_odometry.update(m_gyro.getRotation2d(), getCurrentWheelDistances());
   }
 
   /**
@@ -93,18 +93,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
-  }
+  // public Pose2d getPose() {
+    // return m_odometry.getPoseMeters();
+  // }
 
   /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(m_gyro.getRotation2d(), getCurrentWheelDistances(), pose);
-  }
+  // public void resetOdometry(Pose2d pose) {
+  //   m_odometry.resetPosition(m_gyro.getRotation2d(), getCurrentWheelDistances(), pose);
+  // }
 
   /**
    * Drives the robot at given x, y and theta speeds. Speeds range from [-1, 1] and the linear
@@ -117,7 +117,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     if (fieldRelative) {
-      m_drive.driveCartesian(xSpeed, ySpeed, rot, m_gyro.getRotation2d());
+      // m_drive.driveCartesian(xSpeed, ySpeed, rot, m_gyro.getRotation2d());
     } else {
       m_drive.driveCartesian(xSpeed, ySpeed, rot);
     }
@@ -215,25 +215,25 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
+  // public void zeroHeading() {
+  //   m_gyro.reset();
+  // }
 
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-  public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
-  }
+  // public double getHeading() {
+  //   return m_gyro.getRotation2d().getDegrees();
+  // }
 
   /**
    * Returns the turn rate of the robot.
    *
    * @return The turn rate of the robot, in degrees per second
    */
-  public double getTurnRate() {
-    return -m_gyro.getRate();
-  }
+  // public double getTurnRate() {
+  //   return -m_gyro.getRate();
+  // }
 }

@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
 public class HangerSubsystem extends SubsystemBase {
-  private final PWMSparkMax m_testMotor = new PWMSparkMax(DriveConstants.kFrontLeftChannel);
+  private final PWMSparkMax m_testMotor = new PWMSparkMax(3);
   /** Creates a new ExampleSubsystem. */
-  public HangerSubsystem() {}
+  public HangerSubsystem() {
+    
+  }
 
   /**
    * Example command factory method.
@@ -33,7 +35,7 @@ public class HangerSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          m_testMotor.set(0.5);
+          m_testMotor.set(0.1);
           System.out.println("A was pressed");
         });
   }
@@ -53,7 +55,7 @@ public class HangerSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          m_testMotor.set(-0.5);
+          m_testMotor.set(-0.1);
           System.out.println("B was pressed");
         });
       }
