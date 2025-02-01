@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrainSubsystem extends SubsystemBase {
-  private final PWMSparkMax m_frontLeft = new PWMSparkMax(DriveConstants.kFrontLeftChannel);
+  private final PWMSparkMax m_frontLeft = new PWMSparkMax(7);
   private final PWMSparkMax m_rearLeft = new PWMSparkMax(DriveConstants.kRearLeftChannel);
   private final PWMSparkMax m_frontRight = new PWMSparkMax(DriveConstants.kFrontRightChannel);
   private final PWMSparkMax m_rearRight = new PWMSparkMax(DriveConstants.kRearRightChannel);
