@@ -79,8 +79,11 @@ public final class Constants {
   }
 
 public static class SubsystemConstants {
-  public static final int kGrabber1Channel = 6;
-  public static final int kGrabber2Channel = 7;
+  public static final int kGrabber1Channel = 19;
+  public static final int kGrabber2Channel = 18;
+
+  public static final int kliftLeftChannel = 6;
+  public static final int kliftRightChannel = 7;
 }
 
 public static final class OIConstants {

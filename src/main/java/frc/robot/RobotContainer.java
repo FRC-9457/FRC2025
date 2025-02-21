@@ -67,12 +67,12 @@ public class RobotContainer {
             () ->
                 m_robotDrive.drive(
                     -m_driverController.getLeftY(),
-                    m_driverController.getRightX(),
                     m_driverController.getLeftX(),
+                    m_driverController.getRightX(),
                     false),
             m_robotDrive));
 
-    m_robotDrive.setMaxOutput(0.1);
+    m_robotDrive.setMaxOutput(0.3);
   }
 
   /**
@@ -98,7 +98,7 @@ public class RobotContainer {
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
-        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.1)));
+        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.3)));
 
         // new JoystickButton(m_driverController, Button.kA.value)
         // .onTrue(m_robotHanger.startMotor())
@@ -108,19 +108,33 @@ public class RobotContainer {
         // .onTrue(m_robotHanger.reverseMotor())
         // .onFalse(m_robotHanger.stopMotor());
 
-        // new JoystickButton(m_driverController, Button.kX.value)
-        // .onTrue(m_robotLift.goToPosition());
+        new JoystickButton(m_driverController, Button.kB.value)
+        .onTrue(m_robotLift.goToPosition0());
 
-        // new JoystickButton(m_driverController, Button.kY.value)
-        // .onTrue(m_robotLift.encoderReset());
+        new JoystickButton(m_driverController, Button.kA.value)
+        .onTrue(m_robotLift.goToPosition1());
 
         new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(m_algaSubsystem.collect())
-        .onFalse(m_algaSubsystem.stopMotor());
+        .onTrue(m_robotLift.goToPosition2());
 
         new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(m_algaSubsystem.release())
-        .onFalse(m_algaSubsystem.stopMotor());
+        .onTrue(m_robotLift.goToPosition3());
+
+        new JoystickButton(m_driverController, Button.kBack.value)
+        .onTrue(m_robotLift.encoderReset());
+
+        // new JoystickButton(m_driverController, Button.kStart.value)
+        // .onTrue(runOnce(
+        //   () -> {m_robotDrive.zeroHeading();}));
+
+
+        // new JoystickButton(m_driverController, Button.kX.value)
+        // .onTrue(m_algaSubsystem.collect())
+        // .onFalse(m_algaSubsystem.stopMotor());
+
+        // new JoystickButton(m_driverController, Button.kY.value)
+        // .onTrue(m_algaSubsystem.release())
+        // .onFalse(m_algaSubsystem.stopMotor());
   }
 
   /**

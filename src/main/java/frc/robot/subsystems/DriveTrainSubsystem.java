@@ -120,7 +120,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     if (fieldRelative) {
-      // m_drive.driveCartesian(xSpeed, ySpeed, rot, m_gyro.getRotation2d());
+      m_drive.driveCartesian(xSpeed, ySpeed, rot, m_gyro.getRotation2d());
     } else {
       m_drive.driveCartesian(xSpeed, ySpeed, rot);
     }

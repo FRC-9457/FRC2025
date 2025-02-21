@@ -20,18 +20,23 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import frc.robot.Constants.SubsystemConstants;
 
 
 public class LiftSubsystem extends SubsystemBase {
-  private final SparkMax m_testMotor = new SparkMax(3, MotorType.kBrushless);
-  private final SparkClosedLoopController closedLoopController = m_testMotor.getClosedLoopController();
-  private final RelativeEncoder encoder = m_testMotor.getEncoder();
+  private final SparkMax m_rightMotor = new SparkMax(SubsystemConstants.kliftRightChannel, MotorType.kBrushless);
+  private final SparkMax m_leftMotor = new SparkMax(SubsystemConstants.kliftLeftChannel, MotorType.kBrushless);
+  private final SparkClosedLoopController closedLoopControllerRight = m_rightMotor.getClosedLoopController();
+  private final SparkClosedLoopController closedLoopControllerLeft = m_leftMotor.getClosedLoopController();
+  private final RelativeEncoder rightEncoder = m_rightMotor.getEncoder();
+  private final RelativeEncoder leftEncoder = m_leftMotor.getEncoder();
   private final SparkMaxConfig motorConfig = new SparkMaxConfig();
 
 
   /** Creates a new LiftSubsystem. */
   public LiftSubsystem() {
-    encoder.setPosition(0);
+    rightEncoder.setPosition(0);
+    leftEncoder.setPosition(0);
     motorConfig.encoder
       .positionConversionFactor(1)
       .velocityConversionFactor(1);
@@ -40,18 +45,19 @@ public class LiftSubsystem extends SubsystemBase {
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed loop
       // slot, as it will default to slot 0.
-      .p(1.0)
+      .p(0.001)
       .i(0)
-      .d(2.0)
-      .outputRange(-1, 1)
+      .d(0.0)
+      .outputRange(-1, 1);
       // Set PID values for velocity control in slot 1
-      .p(0.0001, ClosedLoopSlot.kSlot1)
-      .i(0, ClosedLoopSlot.kSlot1)
-      .d(0, ClosedLoopSlot.kSlot1)
-      .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-      .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+      // .p(0.0001, ClosedLoopSlot.kSlot1)
+      // .i(0, ClosedLoopSlot.kSlot1)
+      // .d(0, ClosedLoopSlot.kSlot1)
+      // .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+      // .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-    m_testMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+      m_rightMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+      m_leftMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     SmartDashboard.setDefaultNumber("Target Position", 0);
     SmartDashboard.setDefaultNumber("Target Velocity", 0);
@@ -61,12 +67,46 @@ public class LiftSubsystem extends SubsystemBase {
 
   }
 
-  public Command goToPosition() {
+  public Command goToPosition0() {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopController.setReference(10.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          closedLoopControllerRight.setReference(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          System.out.println("X was pressed");
+        });
+  }
+
+  public Command goToPosition1() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          closedLoopControllerRight.setReference(10.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(10.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          System.out.println("X was pressed");
+        });
+  }
+
+  public Command goToPosition2() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          closedLoopControllerRight.setReference(20.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(20.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          System.out.println("X was pressed");
+        });
+  }
+
+  public Command goToPosition3() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          closedLoopControllerRight.setReference(30.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(30.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
           System.out.println("X was pressed");
         });
   }
@@ -76,10 +116,10 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-          encoder.setPosition(0);
-          closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-          encoder.setPosition(0);
+          closedLoopControllerRight.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          rightEncoder.setPosition(0);
+          closedLoopControllerLeft.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+          leftEncoder.setPosition(0);
           System.out.println("Y was pressed");
         });
   }
