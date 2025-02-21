@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -54,14 +56,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
           DriveConstants.kRearRightEncoderReversed);
 
   // The gyro sensor
-  // private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
+  private final Pigeon2 m_gyro = new Pigeon2(DriveConstants.kGyroChannel, "rio");
 
   // Odometry class for tracking robot pose
-  // MecanumDriveOdometry m_odometry =
-  //     new MecanumDriveOdometry(
-  //         DriveConstants.kDriveKinematics,
-  //         m_gyro.getRotation2d(),
-  //         new MecanumDriveWheelPositions());
+  MecanumDriveOdometry m_odometry =
+      new MecanumDriveOdometry(
+          DriveConstants.kDriveKinematics,
+          m_gyro.getRotation2d(),
+          new MecanumDriveWheelPositions());
 
   /** Creates a new DriveSubsystem. */
   public DriveTrainSubsystem() {
@@ -85,7 +87,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    // m_odometry.update(m_gyro.getRotation2d(), getCurrentWheelDistances());
+    m_odometry.update(m_gyro.getRotation2d(), getCurrentWheelDistances());
+    // System.out.printf("current pose %f %f %f\n", getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees());
   }
 
   /**
@@ -93,18 +96,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  // public Pose2d getPose() {
-    // return m_odometry.getPoseMeters();
-  // }
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
 
   /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
    */
-  // public void resetOdometry(Pose2d pose) {
-  //   m_odometry.resetPosition(m_gyro.getRotation2d(), getCurrentWheelDistances(), pose);
-  // }
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(m_gyro.getRotation2d(), getCurrentWheelDistances(), pose);
+  }
 
   /**
    * Drives the robot at given x, y and theta speeds. Speeds range from [-1, 1] and the linear
@@ -215,25 +218,25 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  // public void zeroHeading() {
-  //   m_gyro.reset();
-  // }
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
 
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-  // public double getHeading() {
-  //   return m_gyro.getRotation2d().getDegrees();
-  // }
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
 
   /**
    * Returns the turn rate of the robot.
    *
    * @return The turn rate of the robot, in degrees per second
    */
-  // public double getTurnRate() {
-  //   return -m_gyro.getRate();
-  // }
+  public double getTurnRate() {
+    return m_gyro.getAngularVelocityZWorld().getValueAsDouble();
+  }
 }

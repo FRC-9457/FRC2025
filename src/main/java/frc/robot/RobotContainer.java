@@ -19,6 +19,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.HangerSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
@@ -43,7 +44,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final DriveTrainSubsystem m_robotDrive = new DriveTrainSubsystem();
-  // private final HangerSubsystem m_robotHanger = new HangerSubsystem();\
+  // private final HangerSubsystem m_robotHanger = new HangerSubsystem();
+  private final AlgaeCollectorSubsystem m_algaSubsystem = new AlgaeCollectorSubsystem();
   private final LiftSubsystem m_robotLift = new LiftSubsystem();
 
 
@@ -69,6 +71,8 @@ public class RobotContainer {
                     m_driverController.getLeftX(),
                     false),
             m_robotDrive));
+
+    m_robotDrive.setMaxOutput(0.1);
   }
 
   /**
@@ -104,11 +108,19 @@ public class RobotContainer {
         // .onTrue(m_robotHanger.reverseMotor())
         // .onFalse(m_robotHanger.stopMotor());
 
+        // new JoystickButton(m_driverController, Button.kX.value)
+        // .onTrue(m_robotLift.goToPosition());
+
+        // new JoystickButton(m_driverController, Button.kY.value)
+        // .onTrue(m_robotLift.encoderReset());
+
         new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(m_robotLift.goToPosition());
+        .onTrue(m_algaSubsystem.collect())
+        .onFalse(m_algaSubsystem.stopMotor());
 
         new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(m_robotLift.encoderReset());
+        .onTrue(m_algaSubsystem.release())
+        .onFalse(m_algaSubsystem.stopMotor());
   }
 
   /**

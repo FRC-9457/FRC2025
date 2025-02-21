@@ -4,10 +4,14 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.SubsystemConstants;
 
 public class AlgaeCollectorSubsystem extends SubsystemBase {
+  private final PWMSparkMax m_grabberMotor1 = new PWMSparkMax(SubsystemConstants.kGrabber1Channel);
+  private final PWMSparkMax m_grabberMotor2 = new PWMSparkMax(SubsystemConstants.kGrabber2Channel);
   /** Creates a new ExampleSubsystem. */
   public AlgaeCollectorSubsystem() {}
 
@@ -22,6 +26,38 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
     return runOnce(
         () -> {
           /* one-time action goes here */
+        });
+  }
+
+  public Command collect() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          m_grabberMotor1.set(1.0);
+          m_grabberMotor2.set(-1.0);
+          System.out.println("collect");
+        });
+  }
+
+  public Command release() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          m_grabberMotor1.set(-1.0);
+          m_grabberMotor2.set(1.0);
+          System.out.println("release");
+        });
+  }
+
+  public Command stopMotor() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          m_grabberMotor1.set(0);
+          m_grabberMotor2.set(0);
         });
   }
 
