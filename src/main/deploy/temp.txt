@@ -1,0 +1,98 @@
+import com.revrobotics.CANSparkMAX;
+import com.revrobotics.CANSparkMAXLowLevel.MotorType;
+
+private final CANSparkMAX frontLeftMotor = CANSparkMAX(1,MotorType.kBrushless);
+private final CANSparkMAX backLeftMotor = CANSparkMAX(2,MotorType.kBrushless);
+private final CANSparkMAX frontRightMotor = CANSparkMAX(3,MotorType.kBrushless);
+private final CANSparkMAX backRightMotor = CANSparkMAX(4,MotorType.kBrushless);
+
+public DriveTrainSubsystem() {
+    //Recommended: Restore factory defaults
+    
+    frontLeftMotor.restoreFactoryDefaults();
+    backLeftMotor.restoreFactoryDefaults();
+    frontRightMotor.restoreFactoryDefaults();
+    backRightMotor.restoreFactoryDefaults();
+
+    //Set inversions if necessary
+    frontRightMotor.setInverted(true;)
+    backRightMotor.setInverted(true);
+
+    //Configure current limits to prevent motor damage
+
+    frontLeftMotor.setSmartCurrentLimit(40);
+    backLeftMotor.setSmartCurrentLimit(40);
+    frontRightMotor.setSmartCurrentLimit(40);
+    backRightMotor.setSmartCurrentLimit(40);
+}
+
+//Drive method to control movement
+public void drive(double xSpeed, double ySpeed,double rotation) {
+    frontLeftMotor.set(xSpeed + ySpeed + rotation);
+    backLeftMotor.set(xSpeed - ySpeed + rotation);
+    frontRightMotor.set(xSpeed - ySpeed - rotation);
+    backRightMotor.set(xSpeed + ySpeed - rotation);
+
+}
+
+ppublic class LiftCollectorSubsystem {
+    //Lift Motors
+    
+    private final CANSparkMAX liftMotorLeader = new CANSparkMAX(5,Motortype.kBrushless);
+    private final CANSparkMAX liftMotorFollower = new CANSparkMAX(6,Motortype.kBrushless);
+
+//Colector Motors
+
+private final CANSparkMAX collectorMotorLeader = new CANSparkMAX(7,MotorType.kBrushless);
+private final CANSparkMAX collectorMotorFollower = new CANSparkMAX(8,MotorType.kBrushless);
+
+public LiftCollectorSubsystem() {
+    //Reset to factory defaults
+    liftMotorLeader.restoreFactoryDefaults();
+    liftMotorFollower.restoreFactoryDefaults();
+    collectorMotorLeader.restoreFactoryDefaults();
+    collectorMotorFollower.restoreFactoryDefaults();
+
+    //set follower modes
+    liftMotorFollower.follow(liftMotorLeader);
+    collectorMotorFollower.follow(collectorMotorLeader);
+
+    //set inversions if needed
+    liftMotorLeader.setInverted(false);
+    liftMotorFollower.setInverted(false);
+    collectorMotorLeader.setInverted(false);
+    collectorMotorFollower.setInverted(false);
+
+    //apply current limits to avoid overheating
+    liftMotorLeader.setSmartCurrentLimit(40);
+    liftMotorFollower.setSmartCurrentLimit(40);
+    collectorMotorLeader.setSmartCurrentLimit(30);
+    collectorMotorFollower.setSmartCurrentLimit(30);
+
+}
+
+//set power for lift motors
+public void setLiftPower(double power) {
+    liftMotorLeader.set(power); //THe follower motor will autmoically match
+
+}
+
+//set power for collector motors
+publice void setCollectorPower(double power) {
+    collectorMotorLeader.set(power); //The follower motor will automatically match
+
+  }
+
+}
+
+private final LiftCollectorSubsystem liftCollectorSubsystem = new LiftCollectorSubsystem();
+private final DriveTrainSubsystem driveTrainSubsystem = new DriveTraubsSubsystem();
+
+public void teleop periodic() {
+    //example: drive the robot with joysick input
+    driveTrainSubsystem.drive(0.5,0.0,0.0); //Move foward at 50% speed
+    
+    //example: activate lift and collector together
+    liftCollectorSubsystem.setLiftPower(0.7);
+    liftCollectorSubsystem.setCollectorPower(0.7);
+}

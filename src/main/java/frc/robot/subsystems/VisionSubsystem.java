@@ -6,12 +6,24 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class VisionSubsystem extends SubsystemBase {
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  private NetworkTableEntry tx = table.getEntry("tx");
+  private NetworkTableEntry ty = table.getEntry("ty");
+  private NetworkTableEntry ta = table.getEntry("ta");  
   /** Creates a new VisionSubsystem. */
   public VisionSubsystem() {}
 
-  /**
+  public double gettx () {
+    double x = tx.getDouble(0.0);
+    return x;
+  }
+  /** 
    * Example command factory method.
    *
    * @return a command
@@ -37,6 +49,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // System.out.println(gettx());
     // This method will be called once per scheduler run
   }
 

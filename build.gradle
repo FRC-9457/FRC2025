@@ -102,3 +102,4 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+// implementation 'com.revrobotics.frc:REVLib-java:2024.0.0'

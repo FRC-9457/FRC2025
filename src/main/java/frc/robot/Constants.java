@@ -24,10 +24,10 @@ public final class Constants {
   public static class DriveConstants {
     // public static final int kDriverControllerPort = 0;
     // Wheel motors (Drivetrain motors):
-    public static final int kFrontLeftChannel = 2;
-    public static final int kRearLeftChannel = 1;
-    public static final int kFrontRightChannel = 4;
-    public static final int kRearRightChannel = 3;
+    public static final int kFrontLeftChannel = 1;
+    public static final int kRearLeftChannel = 2;
+    public static final int kFrontRightChannel = 3;
+    public static final int kRearRightChannel = 4;
     // Controller:
     public static final int kJoystickChannel = 0;
     // Encoders:
@@ -72,18 +72,18 @@ public final class Constants {
     public static final double kPFrontRightVel = 0.5;
     public static final double kPRearRightVel = 0.5;
 
-    public static final int kGyroChannel = 5;
+    public static final int kGyroChannel = 5; //Pidgeon 2
 
 // TODO: Change variables to fit our robots' dimensions
 
   }
 
 public static class SubsystemConstants {
-  public static final int kGrabber1Channel = 19;
-  public static final int kGrabber2Channel = 18;
+  public static final int kGrabber1Channel = 7;
+  public static final int kGrabber2Channel = 8;
 
-  public static final int kliftLeftChannel = 6;
-  public static final int kliftRightChannel = 7;
+  public static final int kliftLeftChannel = 5;
+  public static final int kliftRightChannel = 6;
 }
 
 public static final class OIConstants {
