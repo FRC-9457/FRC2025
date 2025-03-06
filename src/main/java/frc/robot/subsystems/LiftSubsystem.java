@@ -72,10 +72,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     motorConfig.smartCurrentLimit(80);
 
-    motorConfigfollower.follow(m_rightMotor, true);
-
       m_rightMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-      m_leftMotor.configure(motorConfigfollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+      m_leftMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     SmartDashboard.setDefaultNumber("Target Position", 0);
     SmartDashboard.setDefaultNumber("Target Velocity", 0);
@@ -91,7 +89,7 @@ public class LiftSubsystem extends SubsystemBase {
     return runOnce(
         () -> {
           closedLoopControllerRight.setReference(0.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(0.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(0.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           System.out.println("X was pressed");
         });
   }
@@ -101,8 +99,8 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(120.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(-120.0,ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerRight.setReference(100.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(-100.0,ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           System.out.println("X was pressed");
         });
   }
@@ -112,8 +110,8 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(-20.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(20.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerRight.setReference(20.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(-20.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           System.out.println("X was pressed");
         });
   }
@@ -123,8 +121,8 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(-30.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(30.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerRight.setReference(30.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(-30.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           System.out.println("X was pressed");
         });
   }
@@ -136,7 +134,7 @@ public class LiftSubsystem extends SubsystemBase {
         () -> {
           closedLoopControllerRight.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           rightEncoder.setPosition(0);
-          // closedLoopControllerLeft.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          closedLoopControllerLeft.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           leftEncoder.setPosition(0);
           System.out.println("Y was pressed");
         });
@@ -172,6 +170,10 @@ public class LiftSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (rightEncoder.getPosition() > 10.0 && rightEncoder.getPosition() < 70.0) {
+      System.out.printf("right %f %f left %f %f\n", rightEncoder.getPosition(), rightEncoder.getVelocity(), leftEncoder.getPosition(), leftEncoder.getVelocity());
+    }
+
   }
 
   @Override
