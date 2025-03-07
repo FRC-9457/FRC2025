@@ -25,11 +25,13 @@ import frc.robot.subsystems.HangerSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.TimedDriveForwards;
+import frc.robot.commands.InitLift;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -172,6 +174,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new TimedDriveForwards(m_robotDrive);
+    return new SequentialCommandGroup(
+      new InitLift(m_robotLift),
+      new TimedDriveForwards(5.0, 0.3, m_robotDrive)
+    );
   }
 }

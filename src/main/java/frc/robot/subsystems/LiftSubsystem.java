@@ -34,11 +34,12 @@ public class LiftSubsystem extends SubsystemBase {
   private final SparkMaxConfig motorConfigfollower = new SparkMaxConfig();
 
   private final double syncThresh = 5.0;
+  private final double hardStopPosition = 130.0;
   private boolean isEnabled = true;
   private boolean isAtPosition = true;
   private double desiredPosition = 0.0;
-
-
+  private double positionThresh = 10.0;
+  
   /** Creates a new LiftSubsystem. */
   public LiftSubsystem() {
     rightEncoder.setPosition(0);
@@ -102,7 +103,7 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          setPosition(100.0);
+          setPosition(20.0);
           System.out.println("X was pressed");
         });
   }
@@ -112,7 +113,7 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          setPosition(20.0);
+          setPosition(30.0);
           System.out.println("X was pressed");
         });
   }
@@ -122,8 +123,18 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          setPosition(30.0);
+          setPosition(100.0);
           System.out.println("X was pressed");
+        });
+  }
+
+  public Command goToInitPosition() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          setPosition(20.0);
+          System.out.println("going to init position");
         });
   }
 
@@ -139,38 +150,21 @@ public class LiftSubsystem extends SubsystemBase {
         });
   }
 
-
-
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // prevent the lift from going past a software hardstop
+    if (Math.abs(rightEncoder.getPosition()) > hardStopPosition) {
+      m_rightMotor.set(0.0);
+      m_leftMotor.set(0.0);
+      setPosition(Math.abs(rightEncoder.getPosition()));
+      System.out.printf("lift subsystem went past the software hardstop of %f!", hardStopPosition);
+    }
 
-    if ()
+    // check if we've reached the desired position
+    if (Math.abs(Math.abs(rightEncoder.getPosition()) - desiredPosition) < positionThresh) {
+      isAtPosition = true;
+    }
 
     // stop all the motors if they are more than syncThresh out of sync
     if (Math.abs(Math.abs(rightEncoder.getPosition()) - Math.abs(leftEncoder.getPosition())) > syncThresh) {
@@ -198,6 +192,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   private void setPosition(double rotations) {
+    desiredPosition = rotations;
     if (isEnabled) {
       closedLoopControllerRight.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
       closedLoopControllerLeft.setReference(-1.0*rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
@@ -206,5 +201,9 @@ public class LiftSubsystem extends SubsystemBase {
     else {
       System.out.println("Attempting to move lift but lift motors disabled!");
     }
+  }
+
+  public boolean isAtPosition() {
+    return isAtPosition;
   }
 }
