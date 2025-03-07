@@ -33,6 +33,11 @@ public class LiftSubsystem extends SubsystemBase {
   private final SparkMaxConfig motorConfig = new SparkMaxConfig();
   private final SparkMaxConfig motorConfigfollower = new SparkMaxConfig();
 
+  private final double syncThresh = 5.0;
+  private boolean isEnabled = true;
+  private boolean isAtPosition = true;
+  private double desiredPosition = 0.0;
+
 
   /** Creates a new LiftSubsystem. */
   public LiftSubsystem() {
@@ -46,7 +51,6 @@ public class LiftSubsystem extends SubsystemBase {
       .positionConversionFactor(1)
       .velocityConversionFactor(1);
 
-      motorConfigfollower.smartCurrentLimit(80);
 
     motorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -72,10 +76,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     motorConfig.smartCurrentLimit(80);
 
-    motorConfigfollower.follow(m_rightMotor, true);
-
-      m_rightMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-      m_leftMotor.configure(motorConfigfollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_rightMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_leftMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     SmartDashboard.setDefaultNumber("Target Position", 0);
     SmartDashboard.setDefaultNumber("Target Velocity", 0);
@@ -90,8 +92,7 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(0.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(0.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          setPosition(0.0);
           System.out.println("X was pressed");
         });
   }
@@ -101,8 +102,7 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(120.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(-120.0,ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          setPosition(100.0);
           System.out.println("X was pressed");
         });
   }
@@ -112,8 +112,7 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(-20.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(20.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          setPosition(20.0);
           System.out.println("X was pressed");
         });
   }
@@ -123,8 +122,7 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(-30.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-          // closedLoopControllerLeft.setReference(30.0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          setPosition(30.0);
           System.out.println("X was pressed");
         });
   }
@@ -134,9 +132,8 @@ public class LiftSubsystem extends SubsystemBase {
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
-          closedLoopControllerRight.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+          setPosition(0.0);
           rightEncoder.setPosition(0);
-          // closedLoopControllerLeft.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
           leftEncoder.setPosition(0);
           System.out.println("Y was pressed");
         });
@@ -172,10 +169,42 @@ public class LiftSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    if ()
+
+    // stop all the motors if they are more than syncThresh out of sync
+    if (Math.abs(Math.abs(rightEncoder.getPosition()) - Math.abs(leftEncoder.getPosition())) > syncThresh) {
+      m_rightMotor.setVoltage(0.0);
+      m_leftMotor.setVoltage(0.0);
+
+      rightEncoder.setPosition(0);
+      leftEncoder.setPosition(0);
+
+      setPosition(0.0);
+
+      rightEncoder.setPosition(0);
+      leftEncoder.setPosition(0);
+
+      m_rightMotor.setVoltage(0.0);
+      m_leftMotor.setVoltage(0.0);
+      isEnabled = false;
+      System.out.println("lift motors out of sync! lift motors disabled");
+    }
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+
+  private void setPosition(double rotations) {
+    if (isEnabled) {
+      closedLoopControllerRight.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+      closedLoopControllerLeft.setReference(-1.0*rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+      isAtPosition = false;
+    }
+    else {
+      System.out.println("Attempting to move lift but lift motors disabled!");
+    }
   }
 }
