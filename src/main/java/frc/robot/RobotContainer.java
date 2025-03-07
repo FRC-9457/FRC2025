@@ -175,8 +175,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-      new InitLift(m_robotLift),
-      new TimedDriveForwards(5.0, 0.3, m_robotDrive)
+      new TimedDriveForwards(1.0, 0.3, m_robotDrive),
+      new InitLift(m_robotLift)
     );
   }
 }
