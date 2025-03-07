@@ -5,7 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -19,10 +20,10 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrainSubsystem extends SubsystemBase {
-  private final PWMSparkMax m_frontLeft = new PWMSparkMax(DriveConstants.kFrontLeftChannel);
-  private final PWMSparkMax m_rearLeft = new PWMSparkMax(DriveConstants.kRearLeftChannel);
-  private final PWMSparkMax m_frontRight = new PWMSparkMax(DriveConstants.kFrontRightChannel);
-  private final PWMSparkMax m_rearRight = new PWMSparkMax(DriveConstants.kRearRightChannel);
+  private final SparkMax m_frontLeft = new SparkMax(DriveConstants.kFrontLeftChannel, MotorType.kBrushless);
+  private final SparkMax m_rearLeft = new SparkMax(DriveConstants.kRearLeftChannel, MotorType.kBrushless);
+  private final SparkMax m_frontRight = new SparkMax(DriveConstants.kFrontRightChannel, MotorType.kBrushless);
+  private final SparkMax m_rearRight = new SparkMax(DriveConstants.kRearRightChannel, MotorType.kBrushless);
 
   private final MecanumDrive m_drive =
       new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);

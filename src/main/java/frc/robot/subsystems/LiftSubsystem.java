@@ -184,6 +184,10 @@ public class LiftSubsystem extends SubsystemBase {
       isEnabled = false;
       System.out.println("lift motors out of sync! lift motors disabled");
     }
+    if (rightEncoder.getPosition() > 10.0 && rightEncoder.getPosition() < 70.0) {
+      System.out.printf("right %f %f left %f %f\n", rightEncoder.getPosition(), rightEncoder.getVelocity(), leftEncoder.getPosition(), leftEncoder.getVelocity());
+    }
+
   }
 
   @Override

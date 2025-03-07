@@ -125,11 +125,11 @@ public class RobotContainer {
         new JoystickButton(m_driverController, Button.kA.value)
         .onTrue(m_robotLift.goToPosition1());
 
-        // new JoystickButton(m_driverController, Button.kX.value)
-        // .onTrue(m_robotLift.goToPosition2());
+        new JoystickButton(m_driverController, Button.kX.value)
+        .onTrue(m_robotLift.goToPosition2());
 
-        // new JoystickButton(m_driverController, Button.kY.value)
-        // .onTrue(m_robotLift.goToPosition3());
+        new JoystickButton(m_driverController, Button.kY.value)
+        .onTrue(m_robotLift.goToPosition3());
 
         new JoystickButton(m_driverController, Button.kBack.value)
         .onTrue(m_robotLift.encoderReset());
@@ -159,13 +159,13 @@ public class RobotContainer {
         //   () -> {m_robotDrive.zeroHeading();}));
 
 
-        new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(m_algaSubsystem.collect())
-        .onFalse(m_algaSubsystem.stopMotor());
+        // new JoystickButton(m_driverController, Button.kX.value)
+        // .onTrue(m_algaSubsystem.collect())
+        // .onFalse(m_algaSubsystem.stopMotor());
 
-        new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(m_algaSubsystem.release())
-        .onFalse(m_algaSubsystem.stopMotor());
+        // new JoystickButton(m_driverController, Button.kY.value)
+        // .onTrue(m_algaSubsystem.release())
+        // .onFalse(m_algaSubsystem.stopMotor());
   }
 
   /**
